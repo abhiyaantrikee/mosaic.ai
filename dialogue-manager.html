@@ -1,0 +1,139 @@
+<script type="text/javascript">
+    RED.nodes.registerType('dialogue-manager',{
+        category: 'function',
+        color: '#a6bbcf',
+        defaults: {
+			isDecisional :{value:""},
+			isConnector :{value:""},
+			integration:{value:""},
+            connectorType:{value:""},
+            url:{value:""},
+            paramKey:{value:null},
+            paramValue:{value:null},
+            parameters:{value:null}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "file.png",
+        label: function() {
+            return this.name||"dialogue-manager";
+        },
+        oneditprepare: function(){
+            if(this.url){
+                $("#node-input-isConnector").prop('checked', true);
+            }
+            if($("#node-input-isConnector").is(':checked') && this.url){
+                $(".urlbt").show();
+                if(this.paramKey){
+                    $(".node-input-urlParams").show();
+                }
+            }
+            var addParameters = function(){
+                var count = 0;
+                $("#connectorDiv1").off('click', "#addparambt1").on('click', "#addparambt1", function(){
+                    var $div = $("<div>").attr({style:'margin-left: 20px;', class: 'form-row node-input-urlParams'});
+                    var $keyLabel = $("<label>").attr({for: 'node-input-paramKey', style: 'display: inline-block; width: auto; vertical-align: top;'});
+                    var $keyi = $("<i>").attr({class: 'fa fa-map'});
+                    var $keyInput = $('<input type="text">').attr({id: 'node-input-paramKey', style: 'display: inline-block; width: 30%; vertical-align: top;', placeholder: 'Key'});
+                    var $valueInput = $('<input type="text">').attr({id: 'node-input-paramValue', style: 'display: inline-block; width: 30%; vertical-align: top;', placeholder: 'Value'});
+                    $keyLabel.append($keyi);
+                    $div.append($keyLabel);
+                    $div.append($keyInput);
+                    $div.append($valueInput);
+                    $div.attr('id','paramHolder1Div1'+'_'+count);
+                    $("#connectorDiv1").append($div);
+                    count++;
+				});
+                $("#connectorDiv2").off('click', "#addparambt2").on('click', "#addparambt2", function(){
+                    var $div = $("<div>").attr({style:'margin-left: 20px;', class: 'form-row node-input-urlParams'});
+                    var $keyLabel = $("<label>").attr({for: 'node-input-paramKey', style: 'display: inline-block; width: auto; vertical-align: top;'});
+                    var $keyi = $("<i>").attr({class: 'fa fa-map'});
+                    var $keyInput = $('<input type="text">').attr({id: 'node-input-paramKey', style: 'display: inline-block; width: 30%; vertical-align: top;', placeholder: 'Key'});
+                    var $valueInput = $('<input type="text">').attr({id: 'node-input-paramValue', style: 'display: inline-block; width: 30%; vertical-align: top;', placeholder: 'Value'});
+                    $keyLabel.append($keyi);
+                    $div.append($keyLabel);
+                    $div.append($keyInput);
+                    $div.append($valueInput);
+                    $div.attr('id','paramHolder2Div2'+'_'+count);
+                    $("#connectorDiv2").append($div);
+                    count++;
+				});
+            };
+            $("#addurlbt").on('click', function(){
+                $("#node-input-isConnector").prop('checked', true);
+                var $tmpl = $('.urlbt').last();
+                if($("#connector-list > div").length === 1){
+                    $tmpl.attr('id','connectorDiv1');
+                    $("#connectorDiv1 > button").attr('id', 'addparambt1');
+                    $tmpl.show();
+                    $tmpl.after($tmpl.clone().attr('id', 'connectorDiv2').find("input:text").val("").end()
+                          .appendTo($tmpl).hide());
+                    $("#connectorDiv2 > button").attr('id', 'addparambt2');
+                }else{
+                    $("#connector-list > div").show();
+                }
+                addParameters();
+                
+            });
+        },
+		oneditsave: function(){
+            this.paramKey = [];
+            var  parameters = this.parameters = {};
+            parameters.isDecisional = this.isDecisional;
+            parameters.isConnector = this.isConnector;
+            var populateUrlAndParams = function(opt, selector, urlType){
+                opt[urlType] = {};
+                opt[urlType].url = $("#"+selector).find("input:text").val();  
+                opt[urlType].params = [];
+                $("#"+selector +" > div.node-input-urlParams").each(function(){
+                    var pathParam = {
+                        key: $(this).find('#node-input-paramKey').val(),
+                        value: $(this).find('#node-input-paramValue').val()
+                    }
+                    opt[urlType].params.push(pathParam);
+                });
+            }
+            if($("#connectorDiv1").find("select > option:selected").val() === 'NLP'){
+                populateUrlAndParams(parameters, 'connectorDiv1', 'NLP');
+            } else {
+                populateUrlAndParams(parameters, 'connectorDiv2', 'CS');
+            }
+            if($("#connectorDiv2").find("select > option:selected").val() === 'CS'){
+                populateUrlAndParams(parameters, 'connectorDiv2', 'CS');
+            } else {
+                populateUrlAndParams(parameters, 'connectorDiv1', 'NLP');
+            }
+		}
+    });
+</script>
+<script type="text/x-red" data-template-name="dialogue-manager">
+    <div class="form-row">
+        <input type="checkbox" id="node-input-isDecisional" style="display: inline-block; width: auto; vertical-align: top;">
+        <label for="node-input-isDecisional" style="width: auto" data-i18n="common.label.is-decisional"></label>
+    </div>
+    <div class="form-row">
+        <input type="checkbox" id="node-input-isConnector"  style="display: inline-block; width: auto; vertical-align: top;">
+        <label for="node-input-isConnector" style="width: auto" data-i18n="common.label.is-connector"></label>
+    </div>
+    <div class="form-row">
+        <label for="node-input-decision"><i class="icon-tag"></i> <span data-i18n="common.label.integration"></span></label>
+    </div>
+    <div class="form-list" id="connector-list">
+	    <p class="section-type section-card">
+            <button id="addurlbt"><i class="fa fa-plus" aria-hidden="true"></i></button>
+        </p>
+        <div class="form-row urlbt hide">
+			<label for="node-input-url" style="width: 10%"><i class="fa fa-globe"></i> <span data-i18n="http.label.url"></span></label>
+			<select id="node-input-connectorType" style="display: inline-block; width: 20%; margin-bottom: 10px; vertical-align: top;">
+				<option value="NLP">NLP</option>
+				<option value="CS">CS</option>
+			</select>
+			<input type="text" id="node-input-url" placeholder="http://" style="display: inline-block; width: 60%; vertical-align: top;">
+			<button id="addparambt"><i class="fa fa-plus"></i></button>
+		</div>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="dialogue-manager">
+    <p>A simple node that converts the message payloads into all dialogue-manager characters</p>
+</script>

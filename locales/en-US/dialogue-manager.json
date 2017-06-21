@@ -1,0 +1,24 @@
+{
+    "common":{
+        "label":{
+            "is-decisional":"Decision",
+            "is-connector":"Connector",
+            "integration": "Integration"
+        },
+        "errors":{
+            
+        }
+        
+    },
+    "http":{
+        "label":{
+            "url":"URL",
+            "paramKey":"Key",
+            "paramValue":"Value"
+        },
+        "errors":{
+            "no-url":"No url specified"
+        }
+        
+    }
+}
