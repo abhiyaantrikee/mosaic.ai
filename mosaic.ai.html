@@ -1,0 +1,159 @@
+<script type="text/javascript">
+  RED.nodes.registerType('mosaic.ai', {
+    category: 'function',
+    color: '#FFCC66',
+    defaults: {
+      isDecisional :{value:''},
+			isConnector :{value:''},
+      connectors: {
+        value: [{url: ''}]
+      },
+      mappers:{
+        value:[{intent:'', dialogue:''}]
+      },
+      outputs: {
+        value: 1
+      }
+    },
+    inputs: 1,
+    outputs: 1,
+    paletteLabel: 'mosaic.ai',
+    icon: 'mosaic.png',
+    label: function() {
+      return 'mosaic';
+    },
+    oneditsave: function() {
+      var connectors = $('#node-input-connector-container').editableList('items');
+      var mappers = $('#node-input-mapper-container').editableList('items');
+      var node = this;
+      node.isDecisional = $('#node-input-isDecisional').val();
+      node.isConnector = $('#node-input-isConnector').val();
+      node.connectors = [];
+      connectors.each(function(i) {
+        var connector = $(this);
+        var url = connector.find('input').val();
+        var type = connector.find('select').val();
+        if ((url != null && url != '') && (type != null && type !='')) {
+          node.connectors.push({url: url, type: type});
+        }
+      });
+      node.mappers = [];
+      mappers.each(function(i){
+        var mapper = $(this);
+        var intent = mapper.find('input.node-input-intent').val();
+        var dialogue = mapper.find('input.node-input-dialogue').val();
+        if ((intent != null && intent != '') && (dialogue !=null && dialogue!='')) {
+          node.mappers.push({intent: intent, dialogue: dialogue});
+        }
+      });
+    },
+    oneditprepare: function() {
+      var node = this;
+      $("#node-input-connector-container").css('min-height','130px').css('min-width','450px').editableList({
+        addItem: function (cont, i, opt) {
+          if(i > 1){
+            $('ol li:nth-child(3)').remove();
+            return;
+          }
+          var connector = opt;
+          var row = $('<div/>').appendTo(cont);
+          
+          var urlType = $('<select/>', {style:"width:20%; margin-left: 5px; text-align: left;"}).appendTo(row);
+          var typeArr = [
+            {val: '1', text: 'NLP'},
+            {val: '2', text: 'CS'}
+          ];
+          $(typeArr).each(function() {
+            urlType.append($("<option>").attr('value',this.val).text(this.text));
+          });
+          var urlfield = $('<input/>', {style:"width:70%; margin-left: 5px; text-align: left;"})
+            .attr('placeholder', 'Insert URL')
+            .attr('type', 'text')
+            .appendTo(row);
+          if (connector.url != null) {
+            urlfield.val(connector.url);
+            urlType.val(connector.type);
+          }
+          var finalspan = $('<span/>',{style:"float: right;margin-top: 6px;"}).appendTo(row);
+          finalspan.append('&nbsp;&#8594; <span class="node-input-connector-index">' + (i + 1) + '</span>');
+        },
+        removeItem: function(opt) {
+          var connectors = $('#node-input-connector-container').editableList('items');
+          connectors.each(function(i) {
+            $(this).find('.node-input-connector-index').html(i + 1);
+          });
+        },
+        sortable: false,
+        removable: true
+      });
+      for (var i=0; i < node.connectors.length; i++) {
+        var connector = this.connectors[i];
+        $('#node-input-connector-container').editableList('addItem', connector);
+      }
+      $("#node-input-mapper-container").css('min-height','250px').css('min-width','450px').editableList({
+        addItem: function (cont, i, opt) {
+          var mapper = opt;
+          var row = $('<div/>').appendTo(cont);
+          
+          var intent = $('<input/>', {style:"width:40%; margin-left: 5px; text-align: left;", class: "node-input-intent"})
+            .attr('placeholder', 'intent')
+            .attr('type', 'text')
+            .appendTo(row);
+          var dialogue = $('<input/>', {style:"width:40%; margin-left: 5px; text-align: left;", class: "node-input-dialogue"})
+            .attr('placeholder', 'dialogue')
+            .attr('type', 'text')
+            .appendTo(row);
+          console.log('mapper.intent -> ', mapper.intent, ' mapper.dialogue -> ', mapper.dialogue);
+          if (mapper.intent != null && mapper.dialogue !=null) {
+            console.log('****inside intent and mapper section ****');
+            intent.val(mapper.intent);
+            dialogue.val(mapper.dialogue);
+          }
+          var finalspan = $('<span/>',{style:"float: right;margin-top: 6px;"}).appendTo(row);
+          finalspan.append('&nbsp;&#8594; <span class="node-input-mapper-index">' + (i + 1) + '</span>');
+        },
+        removeItem: function(opt) {
+          var mappers = $('#node-input-mapper-container').editableList('items');
+          mappers.each(function(i) {
+            $(this).find('.node-input-mapper-index').html(i + 1);
+          });
+        },
+        sortable: false,
+        removable: true
+      });
+      for (var i=0; i < node.mappers.length; i++) {
+        var mapper = this.mappers[i];
+        $('#node-input-mapper-container').editableList('addItem', mapper);
+      }
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="mosaic.ai">
+  <div class="form-row">
+    <input type="checkbox" id="node-input-isDecisional" style="display: inline-block; width: auto; vertical-align: top;">
+    <label for="node-input-isDecisional" style="width: auto" data-i18n="common.label.is-decisional"></label>
+  </div>
+  <div class="form-row">
+    <input type="checkbox" id="node-input-isConnector"  style="display: inline-block; width: auto; vertical-align: top;">
+    <label for="node-input-isConnector" style="width: auto" data-i18n="common.label.is-connector"></label>
+  </div>
+  <div class="form-row">
+    <label for="node-input-connector" style="width:100%;"><i class="fa fa-tag"></i> Connector definiton:</label>
+  </div>
+  <div class="form-row node-input-connector-container-row">
+      <ol id="node-input-connector-container"></ol>
+  </div>
+  <div class="form-row">
+    <label for="node-input-mapper" style="width:100%;"><i class="fa fa-tag"></i> Intent and Dialogue mapper:</label>
+  </div>
+  <div class="form-row node-input-mapper-container-row">
+      <ol id="node-input-mapper-container"></ol>
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="mosaic.ai">
+    <p>A simple dialogue management and state management node</p>
+    <p>A node that work as a connector to NLP</p>
+    <p>And takes decision based on the intent received from NLP and ask content service for the actual dialogue content.</p>
+</script>

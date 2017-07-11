@@ -1,13 +1,23 @@
 module.exports = function(RED) {
-    function DialogueMangerNode(config) {
+    function MosaicNode(config) {
         RED.nodes.createNode(this,config);
         var node = this;
         var nodeMethod = config.method || "GET";
         node.on('input', function(data) {
             data.payload = data.payload;
-            var nlp = config.parameters.NLP;
-            var cs = config.parameters.CS;
-            if(config.parameters.isConnector){
+            console.log('Printing config : -> ', config);
+            var connectors = config.connectors;
+            var mappers = config.mappers;
+            var nlp;
+            var cs;
+            connectors.forEach(function(element) {
+                if(element.type === 1){
+                    nlp = element
+                }else{
+                    cs = element
+                }
+            });
+            if(config.isConnector){
                 if(!nlp.url || !cs.url ){
                     node.error(RED._("http.errors.no-url"), data);
                     node.status({
@@ -23,5 +33,5 @@ module.exports = function(RED) {
             node.send(data);
         });
     }
-    RED.nodes.registerType("dialogue-manager",DialogueMangerNode,{});
+    RED.nodes.registerType("mosaic.ai",MosaicNode,{});
 }

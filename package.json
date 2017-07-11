@@ -1,14 +1,14 @@
 {
-  "name": "node-red-contrib-dialogue-manager",
+  "name": "node-red-contrib-mosaic.ai",
   "version": "0.0.1",
   "description": "",
   "author": "",
   "dependencies": {
   },
-	"keywords": [ "node-red", "dialogue-manager", "chatbot" ],
+	"keywords": [ "node-red", "dialogue-manager", "chatbot", "ai", "mosaic" ],
 	"node-red": {
 		"nodes": {
-			"dialogue-manager": "dialogue-manager.js"
+			"dialogue-manager": "mosaic.ai.js"
 		}
 	}
 }
