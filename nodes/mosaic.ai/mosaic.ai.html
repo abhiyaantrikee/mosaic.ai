@@ -1,6 +1,6 @@
 <script type="text/javascript">
   RED.nodes.registerType('mosaic.ai', {
-    category: 'function',
+    category: 'mosaic',
     color: '#FFCC66',
     defaults: {
       isDecisional :{value:''},
@@ -33,6 +33,7 @@
         var connector = $(this);
         var url = connector.find('input').val();
         var type = connector.find('select').val();
+        //var typeText = connector.find('select').text();
         if ((url != null && url != '') && (type != null && type !='')) {
           node.connectors.push({url: url, type: type});
         }
@@ -48,6 +49,30 @@
       });
     },
     oneditprepare: function() {
+      if($('#node-input-isConnector').is(":checked")){
+        $('#node-input-connector-container').show();
+      }else{
+        $('#node-input-connector-container').hide();
+      }
+      $('#node-input-isConnector').change(function() { 
+        if(this.checked) {
+           $('#node-input-connector-container').show();
+        }else{
+          $('#node-input-connector-container').hide();
+        }
+      });
+      if($('#node-input-isDecisional').is(":checked")){
+        $('#node-input-mapper-container').show();
+      }else{
+        $('#node-input-mapper-container').hide();
+      }
+      $('#node-input-isDecisional').change(function() { 
+        if(this.checked) {
+           $('#node-input-mapper-container').show();
+        }else{
+          $('#node-input-mapper-container').hide();
+        }
+      });
       var node = this;
       $("#node-input-connector-container").css('min-height','130px').css('min-width','450px').editableList({
         addItem: function (cont, i, opt) {
@@ -130,11 +155,7 @@
 </script>
 
 <script type="text/x-red" data-template-name="mosaic.ai">
-  <div class="form-row">
-    <input type="checkbox" id="node-input-isDecisional" style="display: inline-block; width: auto; vertical-align: top;">
-    <label for="node-input-isDecisional" style="width: auto" data-i18n="common.label.is-decisional"></label>
-  </div>
-  <div class="form-row">
+  <div class="form-row">  
     <input type="checkbox" id="node-input-isConnector"  style="display: inline-block; width: auto; vertical-align: top;">
     <label for="node-input-isConnector" style="width: auto" data-i18n="common.label.is-connector"></label>
   </div>
@@ -143,6 +164,10 @@
   </div>
   <div class="form-row node-input-connector-container-row">
       <ol id="node-input-connector-container"></ol>
+  </div>
+  <div class="form-row">
+    <input type="checkbox" id="node-input-isDecisional" style="display: inline-block; width: auto; vertical-align: top;">
+    <label for="node-input-isDecisional" style="width: auto" data-i18n="common.label.is-decisional"></label>
   </div>
   <div class="form-row">
     <label for="node-input-mapper" style="width:100%;"><i class="fa fa-tag"></i> Intent and Dialogue mapper:</label>

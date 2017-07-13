@@ -1,14 +1,28 @@
 {
-  "name": "node-red-contrib-mosaic.ai",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
-  "dependencies": {
+  "name": "mosaic-node",
+  "version": "0.1.0",
+  "description": "Open Source chat bot dialogue management system",
+  "homepage": "https://github.com/abhiyaantrikee/mosaic.ai.git#readme",
+  "scripts": {
+    "start": "node --max-old-space-size=384 node_modules/node-red/red.js --settings ./settings.js",
+    "clean": "rm -rf data/.config.json"
   },
-	"keywords": [ "node-red", "dialogue-manager", "chatbot", "ai", "mosaic" ],
-	"node-red": {
-		"nodes": {
-			"dialogue-manager": "mosaic.ai.js"
-		}
-	}
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abhiyaantrikee/mosaic.ai.git"
+  },
+  "keywords": [],
+  "author": "Ashutosh Ranjan",
+  "contributors": [],
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/abhiyaantrikee/mosaic.ai/issues"
+  },
+  "dependencies": {
+    "node-red": "0.17.4",
+    "when": "3.7.8"
+  },
+  "engines": {
+    "node": ">=4"
+  }
 }
