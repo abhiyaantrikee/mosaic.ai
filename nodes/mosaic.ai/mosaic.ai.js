@@ -4,8 +4,12 @@ module.exports = function(RED) {
         var node = this;
         var nodeMethod = config.method || "GET";
         node.on('input', function(data) {
+            var context = this.context();
             data.payload = data.payload;
             console.log('Printing config : -> ', config);
+            console.log('Printing input data revieved : -> ', data);
+
+           
             var connectors = config.connectors;
             var mappers = config.mappers;
             var nlp;

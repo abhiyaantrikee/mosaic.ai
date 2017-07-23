@@ -1,11 +1,10 @@
 {
-  "name": "node-red-contrib-mosaic.ai",
+  "name": "node-red-contrib-mosaic.facebook",
   "version": "0.0.1",
   "description": "",
   "author": "",
   "dependencies": {
-    "botkit": "^0.5.5",
-    "request": ""
+    "botkit": "^0.5.5"
   },
   "keywords": [
     "node-red",
@@ -18,7 +17,7 @@
   ],
   "node-red": {
     "nodes": {
-      "mosaic.ai": "mosaic.ai.js"
+      "mosaic.facebook":"mosaic.facebook.js"
     }
   }
 }

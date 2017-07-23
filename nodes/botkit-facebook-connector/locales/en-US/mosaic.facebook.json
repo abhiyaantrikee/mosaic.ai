@@ -1,0 +1,19 @@
+{
+    "common":{
+        "label":{
+           "facebook":{
+                   "page":{
+                       "token":"Page Token"
+                   },
+                   "app":{
+                       "id":"App Id",
+                       "verifyToken":"Verify Token"
+                   }
+               }
+        },
+        "errors":{
+            
+        }
+        
+    }
+}

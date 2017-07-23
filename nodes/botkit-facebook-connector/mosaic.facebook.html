@@ -1,0 +1,52 @@
+<script type="text/javascript">
+  RED.nodes.registerType('mosaic.facebook', {
+    category: 'mosaic',
+    color: '#FFCC66',
+    defaults: {
+      pageToken:{value:''},
+      appId:{value:''},
+      verifyToken:{value:''},
+      outputs: {
+        value: 1
+      }
+    },
+    inputs: 1,
+    outputs: 1,
+    paletteLabel: 'mosaic.facebook',
+    icon: 'mosaic.png',
+    label: function() {
+      return 'mosaic';
+    },
+    oneditsave: function() {
+      this.pageToken = $("#node-input-page-token").val();
+      this.appId = $("#node-input-app-id").val();
+      this.verifyToken = $("#node-input-verify-token").val();
+    },
+    oneditprepare: function() {
+      $("#node-input-page-token").val(this.pageToken);
+      $("#node-input-app-id").val(this.appId);
+      $("#node-input-verify-token").val(this.verifyToken);
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="mosaic.facebook" data-lang="en-US">
+  <div class="form-row">
+    <label for="node-input-page-token" style="width: 10%"><i class="fa fa-tag"></i> <span data-i18n="common.label.facebook.page.token"></span></label>
+    <input type="text" id="node-input-page-token" placeholder="facebook page token" value="">
+  </div>
+  <div class="form-row">
+    <label for="node-input-app-id" style="width: 10%"><i class="fa fa-tag"></i> <span data-i18n="common.label.facebook.app.id"></span></label>
+    <input type="text" id="node-input-app-id" placeholder="facebook app id" value="">
+  </div>
+  <div class="form-row">
+    <label for="node-input-verify-token" style="width: 10%"><i class="fa fa-tag"></i> <span data-i18n="common.label.facebook.app.verifyToken"></span></label>
+    <input type="text" id="node-input-verify-token" placeholder="verify token" value="">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="mosaic.facebook">
+    <p>A facebook connector for botkit</p>
+    <p>A node that work as a connector between facebook and botkit</p>
+    <p>And takes decision based on the intent received from NLP and ask content service for the actual dialogue content.</p>
+</script>
