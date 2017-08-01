@@ -3,13 +3,16 @@
         "label":{
            "facebook":{
                    "page":{
-                       "token":"Page Token"
+                       "token":"EAAEu3IqkZBD0BAJMofUcDIid0VxZCqIH6uDq9si1wZASJvDGrMq6ur3gYYFAsEZAXw4wX4F3yNZCdW7yXv2WNG0AOVMEfXZCtYiJJPlkZCXH7UmhsZCVouCVV0oCfTSQ2qZB1XwkchbZAeReCgjr6EMmuSYgo9MWZC8YQPiLcvMB0SpkwZDZD"
                    },
                    "app":{
-                       "id":"App Id",
+                       "id":"332999730460733",
                        "verifyToken":"Verify Token"
                    }
-               }
+               },
+            "bot":{
+                "port": 3000
+            }
         },
         "errors":{
             

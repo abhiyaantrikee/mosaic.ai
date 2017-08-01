@@ -5,7 +5,8 @@
   "author": "",
   "dependencies": {
     "botkit": "^0.5.5",
-    "request": ""
+    "request": "^2.81.0",
+    "debug": "^2.6.8"
   },
   "keywords": [
     "node-red",

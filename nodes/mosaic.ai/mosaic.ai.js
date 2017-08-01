@@ -1,3 +1,7 @@
+'use strict';
+
+var debug = require('debug')('mosaic.ai');
+
 module.exports = function(RED) {
     function MosaicNode(config) {
         RED.nodes.createNode(this,config);
@@ -5,9 +9,10 @@ module.exports = function(RED) {
         var nodeMethod = config.method || "GET";
         node.on('input', function(data) {
             var context = this.context();
-            data.payload = data.payload;
-            console.log('Printing config : -> ', config);
-            console.log('Printing input data revieved : -> ', data);
+            debug('*** data *** ', data);
+            //data.payload =  data.text || data.payload;
+            debug('*** Printing config : -> ', config);
+            debug('*** Printing input data revieved : -> ', data);
 
            
             var connectors = config.connectors;

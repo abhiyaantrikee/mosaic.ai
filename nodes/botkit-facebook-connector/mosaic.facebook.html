@@ -1,8 +1,9 @@
 <script type="text/javascript">
   RED.nodes.registerType('mosaic.facebook', {
-    category: 'mosaic',
+    category: 'mosaic.facebook',
     color: '#FFCC66',
     defaults: {
+      name:{value:''},
       pageToken:{value:''},
       appId:{value:''},
       verifyToken:{value:''},
@@ -15,14 +16,16 @@
     paletteLabel: 'mosaic.facebook',
     icon: 'mosaic.png',
     label: function() {
-      return 'mosaic';
+      return 'mosaic.facebook';
     },
     oneditsave: function() {
+      this.name = $("#node-input-name").val();
       this.pageToken = $("#node-input-page-token").val();
       this.appId = $("#node-input-app-id").val();
       this.verifyToken = $("#node-input-verify-token").val();
     },
     oneditprepare: function() {
+      $("#node-input-name").val(this.name);
       $("#node-input-page-token").val(this.pageToken);
       $("#node-input-app-id").val(this.appId);
       $("#node-input-verify-token").val(this.verifyToken);
@@ -32,15 +35,23 @@
 
 <script type="text/x-red" data-template-name="mosaic.facebook" data-lang="en-US">
   <div class="form-row">
-    <label for="node-input-page-token" style="width: 10%"><i class="fa fa-tag"></i> <span data-i18n="common.label.facebook.page.token"></span></label>
+    <label for="node-input-name" style="width: 10%"><i class="fa fa-tag"></i>
+       <span data-i18n="common.label.facebook.app.verifyToken">Name: </span></label>
+    <input type="text" id="node-input-name" placeholder="name of the component" value="">
+  </div>
+  <div class="form-row">
+    <label for="node-input-page-token" style="width: 10%"><i class="fa fa-tag"></i>
+       <span data-i18n="common.label.facebook.page.token">Page Token: </span></label>
     <input type="text" id="node-input-page-token" placeholder="facebook page token" value="">
   </div>
   <div class="form-row">
-    <label for="node-input-app-id" style="width: 10%"><i class="fa fa-tag"></i> <span data-i18n="common.label.facebook.app.id"></span></label>
+    <label for="node-input-app-id" style="width: 10%"><i class="fa fa-tag"></i> 
+      <span data-i18n="common.label.facebook.app.id">App Id: </span></label>
     <input type="text" id="node-input-app-id" placeholder="facebook app id" value="">
   </div>
   <div class="form-row">
-    <label for="node-input-verify-token" style="width: 10%"><i class="fa fa-tag"></i> <span data-i18n="common.label.facebook.app.verifyToken"></span></label>
+    <label for="node-input-verify-token" style="width: 10%"><i class="fa fa-tag"></i>
+       <span data-i18n="common.label.facebook.app.verifyToken">Verify Token: </span></label>
     <input type="text" id="node-input-verify-token" placeholder="verify token" value="">
   </div>
 </script>

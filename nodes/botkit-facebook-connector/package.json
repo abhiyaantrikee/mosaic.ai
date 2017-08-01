@@ -4,7 +4,11 @@
   "description": "",
   "author": "",
   "dependencies": {
-    "botkit": "^0.5.5"
+    "body-parser":"^1.17.2",
+    "botkit": "^0.5.5",
+    "debug": "^2.6.8",
+    "request":"^2.81.0",
+    "request-promise":"^4.2.1"
   },
   "keywords": [
     "node-red",

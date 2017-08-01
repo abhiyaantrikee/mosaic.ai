@@ -10,7 +10,7 @@ var settings = module.exports = {
     debugUseColors: true,
     nodesDir: path.join(__dirname, "nodes"),
     uiHost: "0.0.0.0",
-    nodesExcludes:[
+    nodesExcludes: [
         '66-mongodb.js',
         '75-exec.js',
         '35-arduino.js',
@@ -41,8 +41,8 @@ var settings = module.exports = {
         'advanced'],
     autoInstallModules: false,
     httpAdminRoot: '/flow',
-    httpStatic: path.join(__dirname,"public"),
-    functionGlobalContext: { },
+    httpStatic: path.join(__dirname, "public"),
+    functionGlobalContext: {},
     flowFile: 'flows.json',
     flowFilePretty: true,
     userDir: './data',
@@ -67,20 +67,27 @@ var settings = module.exports = {
 if (process.env.NODE_RED_USERNAME && process.env.NODE_RED_PASSWORD) {
     settings.adminAuth = {
         type: "credentials",
-        users: function(username) {
+        users: function (username) {
             if (process.env.NODE_RED_USERNAME == username) {
-                return when.resolve({username:username,permissions:"*"});
+                return when.resolve({ username: username, permissions: "*" });
             } else {
                 return when.resolve(null);
             }
         },
-        authenticate: function(username, password) {
+        authenticate: function (username, password) {
             if (process.env.NODE_RED_USERNAME == username &&
                 process.env.NODE_RED_PASSWORD == password) {
-                return when.resolve({username:username,permissions:"*"});
+                return when.resolve({ username: username, permissions: "*" });
             } else {
                 return when.resolve(null);
             }
         }
     }
 }
+
+process.on('uncaughtException', function (err) {
+    console.log('&&&&& setting js &&&&&& ERROR OCCURRED AS SERVER IS ALREADY UP and ERROR IS ...', err);
+    if (err.code == 'EADDRINUSE') {
+        console.log('Address in use');
+    }
+});

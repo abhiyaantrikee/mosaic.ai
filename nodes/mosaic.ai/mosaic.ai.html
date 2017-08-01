@@ -1,8 +1,9 @@
 <script type="text/javascript">
   RED.nodes.registerType('mosaic.ai', {
-    category: 'mosaic',
+    category: 'mosaic.ai',
     color: '#FFCC66',
     defaults: {
+      statename:{value:'',required:true},
       isDecisional :{value:''},
 			isConnector :{value:''},
       connectors: {
@@ -20,13 +21,14 @@
     paletteLabel: 'mosaic.ai',
     icon: 'mosaic.png',
     label: function() {
-      return 'mosaic';
+      return 'mosaic.ai';
     },
     oneditsave: function() {
       var connectors = $('#node-input-connector-container').editableList('items');
       var mappers = $('#node-input-mapper-container').editableList('items');
       var node = this;
       node.isDecisional = $('#node-input-isDecisional').val();
+      node.stateName = $('#node-input-statename').val();
       node.isConnector = $('#node-input-isConnector').val();
       node.connectors = [];
       connectors.each(function(i) {
@@ -49,28 +51,32 @@
       });
     },
     oneditprepare: function() {
+      if($("#node-dialog-delete")){
+        $("#node-dialog-delete").remove();
+      }
+
       if($('#node-input-isConnector').is(":checked")){
-        $('#node-input-connector-container').show();
+        $('#node-input-connector-container-row').show();
       }else{
-        $('#node-input-connector-container').hide();
+        $('#node-input-connector-container-row').hide();
       }
       $('#node-input-isConnector').change(function() { 
         if(this.checked) {
-           $('#node-input-connector-container').show();
+           $('#node-input-connector-container-row').show();
         }else{
-          $('#node-input-connector-container').hide();
+          $('#node-input-connector-container-row').hide();
         }
       });
       if($('#node-input-isDecisional').is(":checked")){
-        $('#node-input-mapper-container').show();
+        $('#node-input-mapper-container-row').show();
       }else{
-        $('#node-input-mapper-container').hide();
+        $('#node-input-mapper-container-row').hide();
       }
       $('#node-input-isDecisional').change(function() { 
         if(this.checked) {
-           $('#node-input-mapper-container').show();
+           $('#node-input-mapper-container-row').show();
         }else{
-          $('#node-input-mapper-container').hide();
+          $('#node-input-mapper-container-row').hide();
         }
       });
       var node = this;
@@ -82,7 +88,6 @@
           }
           var connector = opt;
           var row = $('<div/>').appendTo(cont);
-          
           var urlType = $('<select/>', {style:"width:20%; margin-left: 5px; text-align: left;"}).appendTo(row);
           var typeArr = [
             {val: '1', text: 'NLP'},
@@ -155,24 +160,27 @@
 </script>
 
 <script type="text/x-red" data-template-name="mosaic.ai" data-lang="en-US">
-  <div class="form-row">  
-    <input type="checkbox" id="node-input-isConnector"  style="display: inline-block; width: auto; vertical-align: top;">
-    <label for="node-input-isConnector" style="width: auto" data-i18n="common.label.is-connector"></label>
+  <div class="form-row">
+    <label for="node-input-statename" style="width: 30%"><i class="fa fa-tag"></i>
+       <span data-i18n="common.label.facebook.app.statename">Name : </span></label>
+    <input type="text" id="node-input-statename" placeholder="Name of the State" value="" required="true">
   </div>
   <div class="form-row">
-    <label for="node-input-connector" style="width:100%;"><i class="fa fa-tag"></i> Connector definiton:</label>
+    <label for="node-input-connector" style="width:100%;"><i class="fa fa-tag"></i> Connector definiton:
+      <input type="checkbox" id="node-input-isConnector"  style="display: inline-block; width: auto; vertical-align: top;">
+      <label for="node-input-isConnector" style="width: auto" data-i18n="common.label.is-connector"></label>
+    </label>
   </div>
-  <div class="form-row node-input-connector-container-row">
+  <div class="form-row node-input-connector-container-row" id="node-input-connector-container-row">
       <ol id="node-input-connector-container"></ol>
   </div>
   <div class="form-row">
-    <input type="checkbox" id="node-input-isDecisional" style="display: inline-block; width: auto; vertical-align: top;">
-    <label for="node-input-isDecisional" style="width: auto" data-i18n="common.label.is-decisional"></label>
+    <label for="node-input-mapper" style="width:100%;"><i class="fa fa-tag"></i> Intent and Dialogue mapper:
+      <input type="checkbox" id="node-input-isDecisional" style="display: inline-block; width: auto; vertical-align: top;">
+      <label for="node-input-isDecisional" style="width: auto" data-i18n="common.label.is-decisional"></label>
+    </label>
   </div>
-  <div class="form-row">
-    <label for="node-input-mapper" style="width:100%;"><i class="fa fa-tag"></i> Intent and Dialogue mapper:</label>
-  </div>
-  <div class="form-row node-input-mapper-container-row">
+  <div class="form-row node-input-mapper-container-row" id="node-input-mapper-container-row">
       <ol id="node-input-mapper-container"></ol>
   </div>
 </script>
